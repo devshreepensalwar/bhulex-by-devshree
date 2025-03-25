@@ -16,7 +16,7 @@ class _HelpSupportPageState extends State<HelpSupportPage> {
   @override
   void initState() {
     super.initState();
-    _loadToggleState(); // Load language preference
+    _loadToggleState(); // Load language preferenceijnijn
   }
 
   Future<void> _loadToggleState() async {
