@@ -332,6 +332,25 @@ class _DigitallySign1State extends State<DigitallySign1> {
                                   errorText: state.errorText,
                                 ),
                               ),
+                              // popupProps: PopupProps.menu(
+                              //   showSearchBox: true,
+                              //   searchFieldProps: TextFieldProps(
+                              //     textCapitalization: TextCapitalization.words,
+                              //     inputFormatters: [
+                              //       FilteringTextInputFormatter.allow(
+                              //         RegExp(r'[\p{L}\s]', unicode: true),
+                              //       ),
+                              //       LengthLimitingTextInputFormatter(50),
+                              //     ],
+                              //     decoration: InputDecoration(
+                              //       hintText:
+                              //           widget.isToggled
+                              //               ? 'जिल्हा शोधा...'
+                              //               : 'Search District...',
+                              //       border: const OutlineInputBorder(),
+                              //     ),
+                              //   ),
+                              // ),
                               popupProps: PopupProps.menu(
                                 showSearchBox: true,
                                 searchFieldProps: TextFieldProps(
@@ -351,7 +370,13 @@ class _DigitallySign1State extends State<DigitallySign1> {
                                   ),
                                 ),
                               ),
-
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
+                                ),
+                              ),
                               // onChanged: (value) {
                               //   setState(() {
                               //     Selectedcity = value;
@@ -444,6 +469,7 @@ class _DigitallySign1State extends State<DigitallySign1> {
                                             .toString();
                                   }).toList(),
                               selectedItem: selectedTaluka,
+
                               dropdownDecoratorProps: DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
                                   hintText: LocalizedStrings.getString(
@@ -480,6 +506,13 @@ class _DigitallySign1State extends State<DigitallySign1> {
                                             : 'Search Taluka...',
                                     border: const OutlineInputBorder(),
                                   ),
+                                ),
+                              ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
                                 ),
                               ),
                               onChanged: (value) {
@@ -567,7 +600,6 @@ class _DigitallySign1State extends State<DigitallySign1> {
                                             name.toLowerCase() != 'null',
                                       )
                                       .toList(),
-
                               selectedItem: selectedVillageName,
                               dropdownDecoratorProps: DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
@@ -605,6 +637,13 @@ class _DigitallySign1State extends State<DigitallySign1> {
                                             : 'Search Village...',
                                     border: const OutlineInputBorder(),
                                   ),
+                                ),
+                              ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
                                 ),
                               ),
                               onChanged: (value) {

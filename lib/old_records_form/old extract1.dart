@@ -505,6 +505,13 @@ class _oldextract1State extends State<oldextract1> {
                                   ),
                                 ),
                               ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
+                                ),
+                              ),
                               // onChanged: (value) {
                               //   setState(() {
                               //     Selectedcity = value;
@@ -634,6 +641,13 @@ class _oldextract1State extends State<oldextract1> {
                                   ),
                                 ),
                               ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
+                                ),
+                              ),
                               onChanged: (value) {
                                 setState(() {
                                   selectedTaluka = value;
@@ -753,6 +767,13 @@ class _oldextract1State extends State<oldextract1> {
                                             : 'Search Village...',
                                     border: const OutlineInputBorder(),
                                   ),
+                                ),
+                              ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
                                 ),
                               ),
                               onChanged: (value) {

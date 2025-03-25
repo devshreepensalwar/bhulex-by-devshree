@@ -16,8 +16,8 @@ class IndexSearch1 extends StatefulWidget {
   final String id;
   final String serviceName;
   final String tblName;
-  final bool isToggled; // Added for language toggle
-  final String serviceNameInLocalLanguage; // Added for local service name
+  final bool isToggled;
+  final String serviceNameInLocalLanguage;
 
   const IndexSearch1({
     Key? key,
@@ -33,12 +33,6 @@ class IndexSearch1 extends StatefulWidget {
 }
 
 class _IndexSearch1State extends State<IndexSearch1> {
-  @override
-  void initState() {
-    super.initState();
-    _fetchCity();
-  }
-
   final TextEditingController _ByNameIncasesurveynoisnotknownController =
       TextEditingController();
   final TextEditingController _CTSNoController = TextEditingController();
@@ -56,9 +50,17 @@ class _IndexSearch1State extends State<IndexSearch1> {
 
   final _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchCity();
+  }
+
   void _fetchSroOffice(int cityId) async {
     final String url = URLS().get_all_sro_office_apiUrl;
+    print('Request URL: $url');
     var requestBody = {"city_id": cityId};
+    print('Request Body: ${jsonEncode(requestBody)}');
 
     try {
       var response = await http.post(
@@ -67,15 +69,21 @@ class _IndexSearch1State extends State<IndexSearch1> {
         headers: {'Content-Type': 'application/json'},
       );
 
+      print('SRO Office Response Status Code: ${response.statusCode}');
+      print('SRO Office Raw Response Body: "${response.body}"');
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == 'true') {
           setState(() {
-            sroOfficeList = List<Map<String, dynamic>>.from(data['data']);
+            sroOfficeList = List<Map<String, dynamic>>.from(data['data'] ?? []);
+            print('SRO Office List: $sroOfficeList');
           });
           log('Fetched SRO Office Data: ${data['data']}');
         } else {
-          print('Failed to load SRO Office: ${data['message']}');
+          print(
+            'Failed to load SRO Office: ${data['message'] ?? 'Unknown error'}',
+          );
         }
       } else {
         print('Failed to load SRO Office. Status code: ${response.statusCode}');
@@ -123,39 +131,8 @@ class _IndexSearch1State extends State<IndexSearch1> {
     }
   }
 
-  // void _fetchCity() async {
-  //   final String url = URLS().get_all_city_apiUrl;
-
-  //   try {
-  //     var response = await http.post(
-  //       Uri.parse(url),
-  //       headers: {'Content-Type': 'application/json'},
-  //     );
-
-  //     print('➡ HTTP Status Code: ${response.statusCode}');
-  //     print('➡ Response Body: ${response.body}'); // <-- Print raw JSON response
-
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       if (data['status'] == 'true') {
-  //         setState(() {
-  //           CityData = List<Map<String, dynamic>>.from(data['data']);
-  //         });
-  //         log('✅ Fetched City Data: ${data['data']}');
-  //       } else {
-  //         print('❌ Failed to load city: ${data['message']}');
-  //       }
-  //     } else {
-  //       print('❌ Failed to load data. Status code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('❌ Error in _fetchCity(): $e');
-  //   }
-  // }
   void _fetchCity() async {
     final String url = URLS().get_all_city_apiUrl;
-
-    // Fetch state_id from SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('state_id', '22');
     print('✅ state_id 22 saved to SharedPreferences');
@@ -211,6 +188,7 @@ class _IndexSearch1State extends State<IndexSearch1> {
       selectedSroOfficeName = null;
       _ByNameIncasesurveynoisnotknownController.clear();
     });
+    _fetchCity();
   }
 
   @override
@@ -288,15 +266,6 @@ class _IndexSearch1State extends State<IndexSearch1> {
                           widget.isToggled,
                         );
                       }
-                      // if (!RegExp(
-                      //   r'^[\p{L}\s]+$',
-                      //   unicode: true,
-                      // ).hasMatch(trimmedValue)) {
-                      //   return ValidationMessages.getMessage(
-                      //     'onlyAlphabetsAllowed',
-                      //     widget.isToggled,
-                      //   );
-                      // }
                       return null;
                     },
                     builder: (FormFieldState<String> state) {
@@ -307,9 +276,11 @@ class _IndexSearch1State extends State<IndexSearch1> {
                             items:
                                 CityData.map<String>((item) {
                                   return widget.isToggled
-                                      ? (item['city_name_in_local_language'])
+                                      ? (item['city_name_in_local_language'] ??
+                                              item['city_name'] ??
+                                              '')
                                           .toString()
-                                      : (item['city_name']).toString();
+                                      : (item['city_name'] ?? '').toString();
                                 }).toList(),
                             selectedItem: Selectedcity,
                             dropdownDecoratorProps: DropDownDecoratorProps(
@@ -350,15 +321,39 @@ class _IndexSearch1State extends State<IndexSearch1> {
                                 ),
                               ),
                             ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
                             onChanged: (value) {
                               setState(() {
                                 Selectedcity = value;
+                                final selectedItem = CityData.firstWhere(
+                                  (element) =>
+                                      (widget.isToggled
+                                          ? (element['city_name_in_local_language'] ??
+                                              element['city_name'])
+                                          : element['city_name']) ==
+                                      value,
+                                  orElse: () => {},
+                                );
+
                                 SelectedId =
-                                    CityData.firstWhere(
-                                      (element) =>
-                                          element['city_name'] == value,
-                                    )['id'].toString();
-                                _fetchSroOffice(int.parse(SelectedId!));
+                                    selectedItem.isNotEmpty
+                                        ? selectedItem['id']?.toString()
+                                        : null;
+
+                                if (SelectedId != null) {
+                                  _fetchSroOffice(int.parse(SelectedId!));
+                                } else {
+                                  print(
+                                    'No matching city found for value: $value',
+                                  );
+                                }
+
                                 state.didChange(value);
                               });
                             },
@@ -387,15 +382,6 @@ class _IndexSearch1State extends State<IndexSearch1> {
                           widget.isToggled,
                         );
                       }
-                      // if (!RegExp(
-                      //   r'^[\p{L}\s]+$',
-                      //   unicode: true,
-                      // ).hasMatch(trimmedValue)) {
-                      //   return ValidationMessages.getMessage(
-                      //     'onlyAlphabetsAllowed',
-                      //     widget.isToggled,
-                      //   );
-                      // }
                       return null;
                     },
                     builder: (FormFieldState<String> state) {
@@ -403,13 +389,6 @@ class _IndexSearch1State extends State<IndexSearch1> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           DropdownSearch<String>(
-                            // items:
-                            //     sroOfficeList
-                            //         .map(
-                            //           (item) =>
-                            //               item['sro_office_name'].toString(),
-                            //         )
-                            //         .toList(),
                             items:
                                 sroOfficeList.map<String>((item) {
                                   return widget.isToggled
@@ -457,6 +436,13 @@ class _IndexSearch1State extends State<IndexSearch1> {
                                           : 'Search SRO Office...',
                                   border: const OutlineInputBorder(),
                                 ),
+                              ),
+                            ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
                             onChanged: (value) {

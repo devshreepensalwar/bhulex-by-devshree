@@ -30,6 +30,21 @@ class DisclaimerScreen extends StatefulWidget {
 class _DisclaimerScreenState extends State<DisclaimerScreen> {
   String content = '';
   bool isLoading = true;
+  bool isToggled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadToggleState();
+  }
+
+  Future<void> _loadToggleState() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isToggled = prefs.getBool('isToggled') ?? false;
+    });
+    await fetchDisclaimerContent(); // Fetch content after setting toggle state
+  }
 
   Future<void> fetchDisclaimerContent() async {
     setState(() {
@@ -42,7 +57,10 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
 
       if (customerId == null || customerId.isEmpty) {
         setState(() {
-          content = '<p>Error: Customer ID not found.</p>';
+          content =
+              isToggled
+                  ? '<p>त्रुटी: ग्राहक आयडी सापडला नाही.</p>'
+                  : '<p>Error: Customer ID not found.</p>';
           isLoading = false;
         });
         return;
@@ -66,22 +84,36 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
         if (jsonData['status'].toString() == "true") {
           setState(() {
             content =
-                jsonData['data']['page_content'] ?? '<p>No content found.</p>';
+                isToggled
+                    ? (jsonData['data']['page_content_in_local_language'] ??
+                        '<p>कोणताही मजकूर सापडला नाही.</p>')
+                    : (jsonData['data']['page_content'] ??
+                        '<p>No content found.</p>');
+            log('Displayed Content: $content');
           });
         } else {
           setState(() {
-            content = '<p>Failed to load content.</p>';
+            content =
+                isToggled
+                    ? '<p>मजकूर लोड करण्यात अयशस्वी.</p>'
+                    : '<p>Failed to load content.</p>';
           });
         }
       } else {
         setState(() {
-          content = '<p>Server error: ${response.statusCode}</p>';
+          content =
+              isToggled
+                  ? '<p>सर्व्हर त्रुटी: ${response.statusCode}</p>'
+                  : '<p>Server error: ${response.statusCode}</p>';
         });
       }
     } catch (e) {
       log("❌ Exception: $e");
       setState(() {
-        content = '<p>Something went wrong. Please try again.</p>';
+        content =
+            isToggled
+                ? '<p>काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.</p>'
+                : '<p>Something went wrong. Please try again.</p>';
       });
     } finally {
       setState(() {
@@ -115,12 +147,6 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    fetchDisclaimerContent();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
@@ -130,7 +156,7 @@ class _DisclaimerScreenState extends State<DisclaimerScreen> {
         backgroundColor: const Color(0xFFFDFDFD),
         elevation: 0,
         title: Text(
-          "Disclaimer",
+          isToggled ? "अस्वीकरण" : "Disclaimer",
           style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,

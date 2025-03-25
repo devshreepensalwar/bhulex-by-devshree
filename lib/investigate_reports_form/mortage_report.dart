@@ -387,6 +387,13 @@ class _MortgageReportsState extends State<MortgageReports> {
                                 ),
                               ),
                             ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
                             onChanged: (value) {
                               log('${widget.isToggled}');
                               setState(() {
@@ -501,6 +508,13 @@ class _MortgageReportsState extends State<MortgageReports> {
                                           : 'Search Taluka...',
                                   border: const OutlineInputBorder(),
                                 ),
+                              ),
+                            ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
                             onChanged: (value) {
@@ -621,6 +635,13 @@ class _MortgageReportsState extends State<MortgageReports> {
                                           : 'Search Village...',
                                   border: const OutlineInputBorder(),
                                 ),
+                              ),
+                            ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
                             onChanged: (value) {

@@ -338,15 +338,15 @@ class _LegaldraftsState extends State<Legaldrafts> {
                           widget.isToggled,
                         );
                       }
-                      if (!RegExp(
-                        r'^[\p{L}\s]+$',
-                        unicode: true,
-                      ).hasMatch(trimmedValue)) {
-                        return ValidationMessageslegaldraft.getMessage(
-                          'onlyAlphabetsAllowed',
-                          widget.isToggled,
-                        );
-                      }
+                      // if (!RegExp(
+                      //   r'^[\p{L}\s]+$',
+                      //   unicode: true,
+                      // ).hasMatch(trimmedValue)) {
+                      //   return ValidationMessageslegaldraft.getMessage(
+                      //     'onlyAlphabetsAllowed',
+                      //     widget.isToggled,
+                      //   );
+                      // }
                       return null;
                     },
                     builder: (FormFieldState<String> state) {
@@ -413,6 +413,13 @@ class _LegaldraftsState extends State<Legaldrafts> {
                             //     state.didChange(value);
                             //   });
                             // },
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
                             onChanged: (value) {
                               log('${widget.isToggled}');
                               setState(() {
@@ -527,6 +534,13 @@ class _LegaldraftsState extends State<Legaldrafts> {
                                           : 'Search Taluka...',
                                   border: const OutlineInputBorder(),
                                 ),
+                              ),
+                            ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
                             onChanged: (value) {
@@ -654,6 +668,13 @@ class _LegaldraftsState extends State<Legaldrafts> {
                                           : 'Search Village...',
                                   border: const OutlineInputBorder(),
                                 ),
+                              ),
+                            ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
                             onChanged: (value) {

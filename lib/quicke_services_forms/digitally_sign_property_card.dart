@@ -1137,7 +1137,11 @@ class _propertyCardState extends State<propertyCard> {
                               //enabled: !isLoading,
                               dropdownDecoratorProps: DropDownDecoratorProps(
                                 dropdownSearchDecoration: InputDecoration(
-                                  hintText: 'Select Region',
+                                  // hintText: 'Select Region',
+                                  hintText: PropertyCardStrings.getString(
+                                    'Select Region',
+                                    widget.isToggled,
+                                  ),
                                   border: OutlineInputBorder(),
                                   errorText: state.errorText,
                                 ),
@@ -1152,6 +1156,13 @@ class _propertyCardState extends State<propertyCard> {
                                             : 'Search Region...',
                                     border: OutlineInputBorder(),
                                   ),
+                                ),
+                              ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
                                 ),
                               ),
                               onChanged: (value) {
@@ -1261,6 +1272,13 @@ class _propertyCardState extends State<propertyCard> {
                                   ),
                                 ),
                               ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
+                                ),
+                              ),
                               onChanged: (value) {
                                 if (value != null) {
                                   setState(() {
@@ -1304,67 +1322,6 @@ class _propertyCardState extends State<propertyCard> {
                             ),
                           ],
                         );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _officeController,
-                      decoration: InputDecoration(
-                        hintText: PropertyCardStrings.getString(
-                          'office',
-                          widget.isToggled,
-                        ),
-                        hintStyle: const TextStyle(color: Color(0xFF36322E)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(
-                            color: Color(0xFFC5C5C5),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(
-                            color: Color(0xFFC5C5C5),
-                          ),
-                        ),
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                          RegExp(r'[\p{L}\s]', unicode: true),
-                        ),
-                        LengthLimitingTextInputFormatter(50),
-                      ],
-                      textCapitalization: TextCapitalization.words,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return ValidationMessagespropertycard.getMessage(
-                            'pleaseEnterOffice',
-                            widget.isToggled,
-                          );
-                        }
-                        final trimmedValue = value.trim();
-                        if (RegExp(
-                          r'<.*?>|script|alert|on\w+=',
-                          caseSensitive: false,
-                        ).hasMatch(trimmedValue)) {
-                          return ValidationMessagespropertycard.getMessage(
-                            'invalidCharacters',
-                            widget.isToggled,
-                          );
-                        }
-                        if (!RegExp(
-                          r'^[\p{L}\s]+$',
-                          unicode: true,
-                        ).hasMatch(trimmedValue)) {
-                          return ValidationMessagespropertycard.getMessage(
-                            'onlyAlphabetsAllowed',
-                            widget.isToggled,
-                          );
-                        }
-                        return null;
                       },
                     ),
                     const SizedBox(height: 16),
@@ -1452,6 +1409,13 @@ class _propertyCardState extends State<propertyCard> {
                                   ),
                                 ),
                               ),
+                              dropdownButtonProps: DropdownButtonProps(
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 28,
+                                  color: Color(0xFF9CA3AF),
+                                ),
+                              ),
                               onChanged: (value) {
                                 setState(() {
                                   selectedVillageName = value;
@@ -1477,6 +1441,68 @@ class _propertyCardState extends State<propertyCard> {
                             ),
                           ],
                         );
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _officeController,
+                      decoration: InputDecoration(
+                        hintText: PropertyCardStrings.getString(
+                          'office',
+                          widget.isToggled,
+                        ),
+                        hintStyle: const TextStyle(color: Color(0xFF36322E)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFC5C5C5),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFC5C5C5),
+                          ),
+                        ),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'[\p{L}\s]', unicode: true),
+                        ),
+                        LengthLimitingTextInputFormatter(50),
+                      ],
+                      textCapitalization: TextCapitalization.words,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return ValidationMessagespropertycard.getMessage(
+                            'pleaseEnterOffice',
+                            widget.isToggled,
+                          );
+                        }
+                        final trimmedValue = value.trim();
+                        if (RegExp(
+                          r'<.*?>|script|alert|on\w+=',
+                          caseSensitive: false,
+                        ).hasMatch(trimmedValue)) {
+                          return ValidationMessagespropertycard.getMessage(
+                            'invalidCharacters',
+                            widget.isToggled,
+                          );
+                        }
+                        // if (!RegExp(
+                        //   r'^[\p{L}\s]+$',
+                        //   unicode: true,
+                        // ).hasMatch(trimmedValue)) {
+                        //   return ValidationMessagespropertycard.getMessage(
+                        //     'onlyAlphabetsAllowed',
+                        //     widget.isToggled,
+                        //   );
+                        //}
+                        return null;
                       },
                     ),
                     const SizedBox(height: 16),

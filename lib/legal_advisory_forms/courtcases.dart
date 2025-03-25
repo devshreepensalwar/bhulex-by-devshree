@@ -417,6 +417,13 @@ class _CourtcasesState extends State<Courtcases> {
                             //     state.didChange(value);
                             //   });
                             // },
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
                             onChanged: (value) {
                               setState(() {
                                 Selectedcity = value;
@@ -523,6 +530,13 @@ class _CourtcasesState extends State<Courtcases> {
                                           : 'Search Court...',
                                   border: const OutlineInputBorder(),
                                 ),
+                              ),
+                            ),
+                            dropdownButtonProps: DropdownButtonProps(
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 28,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
                             onChanged: (String? newValue) {
